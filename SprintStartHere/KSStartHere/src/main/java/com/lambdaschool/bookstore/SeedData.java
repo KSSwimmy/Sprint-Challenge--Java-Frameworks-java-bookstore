@@ -1,12 +1,10 @@
 package com.lambdaschool.bookstore;
 
-import com.lambdaschool.bookstore.models.Quote;
-import com.lambdaschool.bookstore.models.Role;
-import com.lambdaschool.bookstore.models.User;
-import com.lambdaschool.bookstore.models.UserRoles;
-import com.lambdaschool.bookstore.services.RoleService;
-import com.lambdaschool.bookstore.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.lambdaschool.bookstore.models.*;
+import com.lambdaschool.bookstore.repository.AuthorRepository;
+import com.lambdaschool.bookstore.repository.BookRepository;
+import com.lambdaschool.bookstore.repository.RoleRepository;
+import com.lambdaschool.bookstore.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,12 +15,18 @@ import java.util.ArrayList;
 @Component
 public class SeedData implements CommandLineRunner
 {
-    @Autowired
-    RoleService roleService;
+    RoleRepository rolerepos;
+    UserRepository userrepos;
+    BookRepository bookRepository;
+    AuthorRepository authorRepository;
 
-    @Autowired
-    UserService userService;
-
+    public SeedData(RoleRepository rolerepos, UserRepository userrepos, BookRepository bookRepository, AuthorRepository authorRepository)
+    {
+        this.rolerepos = rolerepos;
+        this.userrepos = userrepos;
+        this.bookRepository = bookRepository;
+        this.authorRepository = authorRepository;
+    }
 
     @Override
     public void run(String[] args) throws Exception
@@ -31,44 +35,46 @@ public class SeedData implements CommandLineRunner
         Role r2 = new Role("user");
         Role r3 = new Role("data");
 
-        roleService.save(r1);
-        roleService.save(r2);
-        roleService.save(r3);
+        r1 = rolerepos.save(r1);
+        r2 = rolerepos.save(r2);
+        r3 = rolerepos.save(r3);
 
-        // admin, data, user
         ArrayList<UserRoles> admins = new ArrayList<>();
         admins.add(new UserRoles(new User(), r1));
         admins.add(new UserRoles(new User(), r2));
-        admins.add(new UserRoles(new User(), r3));
-        User u1 = new User("admin", "password", admins);
-        u1.getQuotes().add(new Quote("A creative man is motivated by the desire to achieve, not by the desire to beat others", u1));
-        u1.getQuotes().add(new Quote("The question isn't who is going to let me; it's who is going to stop me.", u1));
-        userService.save(u1);
 
-        // data, user
-        ArrayList<UserRoles> datas = new ArrayList<>();
-        datas.add(new UserRoles(new User(), r3));
-        datas.add(new UserRoles(new User(), r2));
-        User u2 = new User("cinnamon", "1234567", datas);
-        userService.save(u2);
-
-        // user
         ArrayList<UserRoles> users = new ArrayList<>();
         users.add(new UserRoles(new User(), r2));
-        User u3 = new User("barnbarn", "ILuvM4th!", users);
-        u3.getQuotes().add(new Quote("Live long and prosper", u3));
-        u3.getQuotes().add(new Quote("The enemy of my enemy is the enemy I kill last", u3));
-        u3.getQuotes().add(new Quote("Beam me up", u3));
-        userService.save(u3);
 
-        users = new ArrayList<>();
-        users.add(new UserRoles(new User(), r2));
-        User u4 = new User("Bob", "password", users);
-        userService.save(u4);
+        ArrayList<UserRoles> data = new ArrayList<>();
+        data.add(new UserRoles(new User(), r2));
+        data.add(new UserRoles(new User(), r3));
 
-        users = new ArrayList<>();
-        users.add(new UserRoles(new User(), r2));
-        User u5 = new User("Jane", "password", users);
-        userService.save(u5);
+
+        User u1 = new User("barnbarn", "ILuvM4th!", users);
+
+        User u2 = new User("admin", "password", admins);
+
+        User u3 = new User("cinnamon", "123456", data);
+
+        userrepos.save(u1);
+        userrepos.save(u2);
+        userrepos.save(u3);
+
+        Book b1 = new Book("Test book", "123456789", 2018, new ArrayList<>());
+
+        ArrayList<Book> b1List = new ArrayList<>();
+        b1List.add(b1);
+
+        Author a1 = new Author("Andrew", "Safran", new ArrayList<>());
+
+        //Turn off to test assign book to author
+        ArrayList<Author> a1List = new ArrayList<>();
+        a1List.add(a1);
+        b1.setAuthors(a1List);
+        a1.setBooks(b1List);
+
+        bookRepository.save(b1);
+        authorRepository.save(a1);
     }
 }
