@@ -87,4 +87,3 @@ public class Book extends Auditable
         this.authors = authors;
     }
 }
- //
