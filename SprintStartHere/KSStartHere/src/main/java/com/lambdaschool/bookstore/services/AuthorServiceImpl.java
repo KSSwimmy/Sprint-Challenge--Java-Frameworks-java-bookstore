@@ -4,6 +4,7 @@ import com.lambdaschool.bookstore.models.Author;
 import com.lambdaschool.bookstore.repository.AuthorRepository;
 import com.lambdaschool.bookstore.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class AuthorServiceImpl implements AuthorService
     @Autowired
     private AuthorRepository authorRepository;
 
-    @Override
+
     public List<Author> findAllAuthors()
     {
         List<Author> list = new ArrayList<>();
@@ -23,6 +24,12 @@ public class AuthorServiceImpl implements AuthorService
 
         return list;
 
+    }
+
+    @Override
+    public List<Author> findAllAuthors(Pageable pageable)
+    {
+        return null;
     }
 
     @Override
