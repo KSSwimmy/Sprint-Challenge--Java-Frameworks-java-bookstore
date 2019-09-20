@@ -76,4 +76,18 @@ public class BookServiceImpl implements BookService
             throw new ResourceNotFoundException("Could not find book with Id: " + id);
         }
     }
+
+    @Override
+    public Book update(Book book, long id)
+    {
+        return null;
+    }
+
+    @Override
+    public Book save(Book book)
+    {
+        return null;
+    }
+
+
 }

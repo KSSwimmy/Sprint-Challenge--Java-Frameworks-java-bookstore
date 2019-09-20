@@ -18,27 +18,9 @@ import javax.persistence.EntityNotFoundException;
 @RequestMapping
 public class DataController
 {
-    @Autowired
-    private BookService bookService;
 
-    @Autowired
-    private AuthorService authorService;
 
-    @ApiOperation(value = "Return a list of all books", response = Book.class, responseContainer = "list")
-    @ApiImplicitParams({
-                               @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", value = "Select page to retrieve"),
-                               @ApiImplicitParam(name = "size", dataType = "Integer", paramType = "query", value = "Determine number of results per page"),
-                               @ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query",
-                                                 value = "Sorting criteria in the format: property(,asc|desc). " +
-                                                         "Default sort order is ascending. " +
-                                                         "Multiple sort criteria are supported.")
-                       })
-    @GetMapping(value = "/books", produces = {"application/json"})
-    public ResponseEntity<?> getAllBooks(@PageableDefault(page = 0, size = 5)Pageable pageable)
-    {
 
-        return new ResponseEntity<>(bookService.getAllBooks(pageable), HttpStatus.OK);
-    }
 
     @ApiOperation(value = "Return a list of all authors", response = Book.class, responseContainer = "list")
     @ApiImplicitParams({
@@ -52,7 +34,7 @@ public class DataController
     @GetMapping(value = "/authors", produces = {"application/json"})
     public ResponseEntity<?> getAllAuthors(@PageableDefault(page = 0, size = 5)Pageable pageable)
     {
-        return new ResponseEntity<>(authorService.findAllAuthors(pageable), HttpStatus.OK);
+        return new ResponseEntity<>(AuthorService.findAllAuthors(pageable), HttpStatus.OK);
     }
 
 
@@ -64,7 +46,7 @@ public class DataController
     @PutMapping(value = "/data/books/{id}", consumes = {"application/json"}, produces = {"application/json"})
     public ResponseEntity<?> updateBook(@PathVariable long id, @RequestBody Book updatedBook)
     {
-        return new ResponseEntity<>(bookService.updateBook(id, updatedBook), HttpStatus.OK);
+        return new ResponseEntity<>(BookService.updateBook(id, updatedBook), HttpStatus.OK);
     }
 
     @ApiOperation(value = "assigns a book to the specified author", response = void.class)
@@ -75,7 +57,7 @@ public class DataController
     @PostMapping(value = "/data/books/authors/{id}")
     public ResponseEntity<?> assignBookToAuthor(@PathVariable long id, @RequestBody long bookId)
     {
-        authorService.assignBookToAuthor(bookId, id);
+        AuthorService.assignBookToAuthor(bookId, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -87,7 +69,7 @@ public class DataController
     @DeleteMapping(value = "/data/books/{id}")
     public ResponseEntity<?> deleteBook(@PathVariable long id)
     {
-        bookService.deleteBook(id);
+        BookService.deleteBook(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

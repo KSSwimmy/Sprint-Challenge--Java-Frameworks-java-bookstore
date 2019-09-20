@@ -8,9 +8,14 @@ import java.util.List;
 
 public interface BookService
 {
-    List<Book> getAllBooks(Pageable pageable);
+     List<Book> getAllBooks(Pageable pageable);
 
-    Book updateBook(long id, Book book);
+     Book updateBook(long id, Book book);
 
-    void deleteBook(long id);
+     void deleteBook(long id);
+
+     Book update(Book book, long id);
+
+     Book save(Book book);
+
 }
