@@ -28,6 +28,12 @@ public class BookServiceImpl implements BookService
         return rtnList;
     }
 
+    @Override
+    public Book findBookById(long id)
+    {
+        return bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Long.toString(id)));
+    }
+
     @Transactional
     @Override
     public Book updateBook(long id, Book book) throws ResourceNotFoundException

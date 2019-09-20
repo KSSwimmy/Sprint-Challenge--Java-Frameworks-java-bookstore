@@ -24,6 +24,8 @@ public class DataController
     @Autowired private AuthorService authorService;
 
     @Autowired private BookService bookService;
+
+
     @ApiOperation(value = "Return a list of all authors", response = Book.class, responseContainer = "list")
     @ApiImplicitParams({
                                @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", value = "Select page to retrieve"),
@@ -51,7 +53,7 @@ public class DataController
     @PutMapping(value = "/books/{id}", consumes = {"application/json"}, produces = {"application/json"})
     public ResponseEntity<?> updateBook(@ApiParam(name = "Book Id", required = true) @PathVariable long id, @RequestBody @Valid Book book)
     {
-        bookService.update(book, id);
+        bookService.updateBook(id, book);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -69,7 +71,7 @@ public class DataController
     public ResponseEntity<?> assignBookToAuthor(@PathVariable long id, @RequestBody long bookId)
     {
         Book book = bookService.findBookById(id);
-        Author author = authorService.assignBookToAuthor(bookid, authorid);
+        Author author = authorService.findAuthorById(id);
 
         book.getAuthors().add(author);
         Book b = bookService.save(book);

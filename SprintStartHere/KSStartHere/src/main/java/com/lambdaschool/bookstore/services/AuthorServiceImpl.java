@@ -1,5 +1,6 @@
 package com.lambdaschool.bookstore.services;
 
+import com.lambdaschool.bookstore.exceptions.*;
 import com.lambdaschool.bookstore.models.Author;
 import com.lambdaschool.bookstore.repository.AuthorRepository;
 import com.lambdaschool.bookstore.repository.BookRepository;
@@ -16,8 +17,8 @@ public class AuthorServiceImpl implements AuthorService
     @Autowired
     private AuthorRepository authorRepository;
 
-
-    public List<Author> findAllAuthors()
+    @Override
+    public List<Author> findAllAuthors(Pageable pageable)
     {
         List<Author> list = new ArrayList<>();
         authorRepository.findAll().iterator().forEachRemaining(list::add);
@@ -26,15 +27,10 @@ public class AuthorServiceImpl implements AuthorService
 
     }
 
-    @Override
-    public List<Author> findAllAuthors(Pageable pageable)
-    {
-        return null;
-    }
 
     @Override
-    public void assignBookToAuthor(long bookid, long authorid)
+    public Author findAuthorById(long id)
     {
-
+        return authorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Long.toString(id)));
     }
 }

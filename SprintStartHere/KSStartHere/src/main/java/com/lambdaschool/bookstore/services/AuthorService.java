@@ -9,5 +9,7 @@ public interface AuthorService
 {
     List<Author> findAllAuthors(Pageable pageable);
 
-    void assignBookToAuthor(long bookid, long authorid);
+    //Author assignBookToAuthor(long bookid, long authorid);
+
+    Author findAuthorById(long id);
 }
